@@ -2,7 +2,8 @@
 
   QmlSql comes with some helper Objects to connect to Databases Run Queries against SQL.
 Make SQLite Databases. Create Models from SQL Queries. All from Qml. 
-QmlSql source code is licensed under the GNU LESSER GENERAL PUBLIC LICENSE. 
+QmlSql source code is licensed under the MIT license.
+
 While QmlSql documentation is licensed under the GNU Free Documentation License. 
 
 QmlSql Comes with two examples and documents for both.
@@ -36,10 +37,6 @@ https://www.qpm.io/
 ```
 qpm install com.github.josephmillsatwork.qmlsql
 ```
-
-## Online Documentation
-
-There are some gh-pages coming real soon in a push or two away. see #6 or more info.
 
 ## Mobile notes
 

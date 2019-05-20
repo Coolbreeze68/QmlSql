@@ -63,10 +63,11 @@ QString QmlSqlCreateDatabase::filePath() const
 
 void QmlSqlCreateDatabase::setFilePath(const QString &filePath)
 {
-    if ( m_filePath == filePath )
-        return;
-    m_filePath = filePath ;
-    emit filePathChanged();
+    if ( m_filePath != filePath )
+    {
+        m_filePath = filePath ;
+        emit filePathChanged();
+    }
 }
 /*!
  \qmlproperty string QmlSqlCreateDatabase::fileName
@@ -88,10 +89,11 @@ QString QmlSqlCreateDatabase::fileName() const
 */
 void QmlSqlCreateDatabase::setFileName(const QString &fileName)
 {
-    if ( m_fileName == fileName )
-        return;
-    m_fileName = fileName ;
-    emit fileNameChanged();
+    if ( m_fileName != fileName )
+    {
+        m_fileName = fileName ;
+        emit fileNameChanged();
+    }
 }
 
 /*!
@@ -115,9 +117,10 @@ bool QmlSqlCreateDatabase::useMd5() const
 void QmlSqlCreateDatabase::setUseMd5(const bool &useMd5)
 {
     if ( m_useMd5 == useMd5 )
-        return;
-    m_useMd5 = useMd5 ;
-    emit useMd5Changed();
+    {
+        m_useMd5 = useMd5 ;
+        emit useMd5Changed();
+    }
 }
 
 
@@ -141,10 +144,11 @@ QString QmlSqlCreateDatabase::databaseName() const
  */
 void QmlSqlCreateDatabase::setDatabaseName(const QString &databaseName)
 {
-    if ( m_databaseName == databaseName )
-        return;
-    m_databaseName = databaseName ;
-    emit databaseNameChanged();
+    if ( m_databaseName != databaseName )
+    {
+        m_databaseName = databaseName ;
+        emit databaseNameChanged();
+    }
 }
 
 
@@ -176,10 +180,11 @@ QString QmlSqlCreateDatabase::lastCreatedDatabaseFile() const
 */
 void QmlSqlCreateDatabase::setLastCreatedDatabaseFile(const QString lastCreatedDatabaseFile)
 {
-    if ( m_lastCreatedDatabaseFile == lastCreatedDatabaseFile )
-        return;
-    m_lastCreatedDatabaseFile = lastCreatedDatabaseFile ;
-    emit lastCreatedDatabaseFileChanged();
+    if ( m_lastCreatedDatabaseFile != lastCreatedDatabaseFile )
+    {
+        m_lastCreatedDatabaseFile = lastCreatedDatabaseFile ;
+        emit lastCreatedDatabaseFileChanged();
+    }
 }
 
 /*!
@@ -195,21 +200,22 @@ void QmlSqlCreateDatabase::setLastCreatedDatabaseFile(const QString lastCreatedD
 */
 void QmlSqlCreateDatabase::exec()
 {
-    QString dataDir = QStandardPaths::standardLocations(QStandardPaths::DataLocation).first() ;
-    qDebug() << "Making the database ";
+    QString dataDir = QStandardPaths::writableLocation( QStandardPaths::AppDataLocation )  ;
     QString finalName;
     //just in case
     finalName.clear();
 
-    if(m_fileName.length() < 1 ){
-        error("You forgot to set your databases Name");
+    if( m_fileName.isEmpty() )
+    {
+        error( "You forgot to set your databases Name");
         return;
     }
 
     // Deal with the path length
-    if ( m_filePath.length() < 1 )
+    if ( !m_filePath.isEmpty() )
     {
-        if ( m_useMd5 == true ){
+        if ( m_useMd5 == true )
+        {
             QString fName =  generateMd5Sum(m_databaseName);
             finalName = QString("%1/%2%3").arg(dataDir).arg(fName).arg(".sqlight");
             QFile file(finalName);
@@ -225,7 +231,8 @@ void QmlSqlCreateDatabase::exec()
                 QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
                 db.setDatabaseName(m_databaseName);
 
-                if(db.open()){
+                if(db.open())
+                {
                     qDebug()<< "Sweet we created the database " << finalName;
                     setLastCreatedDatabaseFile(finalName);
                     created();
@@ -238,11 +245,10 @@ void QmlSqlCreateDatabase::exec()
             }
         }
         else
-            // NO MD5Sum no Path
         {
             finalName = QString("%1/%2%3").arg(dataDir).arg(m_fileName).arg(".sqlight");
-            QFile file(finalName);
-            if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+            QFile file( finalName );
+            if(!file.open( QIODevice::WriteOnly | QIODevice::Text ) )
             {
                 QString err = QString("Could not open the file %1 for writing to ").arg(finalName);
                 error(err);
@@ -253,7 +259,8 @@ void QmlSqlCreateDatabase::exec()
                 file.close();
                 QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
                 db.setDatabaseName(m_databaseName);
-                if(db.open()){
+                if( db.open() )
+                {
                     qDebug()<< "Sweet we created the database " << finalName;
                     setLastCreatedDatabaseFile(finalName);
                     created();
@@ -265,16 +272,11 @@ void QmlSqlCreateDatabase::exec()
                 }
             }
         }
-    }// END NO PATH NAME SET
-    /////////////////////////////////////////
-
-
-
-    // Ok so the file Path is set now deal with that
-
-
-    else {
-        if ( m_useMd5 == true ){
+    }
+    else
+    {
+        if ( m_useMd5 == true )
+        {
             QString fName =  generateMd5Sum(m_databaseName);
             finalName = QString("%1/%2%3").arg(m_filePath).arg(fName).arg(".sqlight");
             QFile file(finalName);
@@ -290,24 +292,25 @@ void QmlSqlCreateDatabase::exec()
                 QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
                 db.setDatabaseName(m_databaseName);
 
-                if(db.open()){
-                    qDebug()<< "Sweet we created the database " << finalName;
+                if( db.open() )
+                {
+                    qDebug() << "Sweet we created the database " << finalName;
                     setLastCreatedDatabaseFile(finalName);
                     created();
                     db.close();
                 }
                 else
                 {
-                    error("Error in opening the init database");
+                    error( "Error in opening the init database" );
                 }
             }
         }
         else
-            //not using md5Sum
         {
+            //not using md5Sum
             finalName = QString("%1/%2%3").arg(m_filePath).arg(m_databaseName).arg(".sqlight");
             QFile file(finalName);
-            if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+            if( !file.open( QIODevice::WriteOnly | QIODevice::Text ) )
             {
                 QString err = QString("Could not open the file %1 for writing to ").arg(finalName);
                 error(err);
@@ -316,11 +319,12 @@ void QmlSqlCreateDatabase::exec()
             else
             {
                 file.close();
-                QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE");
+                QSqlDatabase db = QSqlDatabase::addDatabase( "QSQLITE" );
                 db.setDatabaseName(m_databaseName);
 
-                if(db.open()){
-                    qDebug()<< "Sweet we created the database " << finalName;
+                if( db.open() )
+                {
+                    qDebug() << "Sweet we created the database " << finalName;
                     setLastCreatedDatabaseFile(finalName);
                     created();
                     db.close();
@@ -335,8 +339,6 @@ void QmlSqlCreateDatabase::exec()
 }
 
 
-
-
 /*!
  \brief QString QmlSqlCreateDatabase::generateMd5Sum(const QString &databaseName)
   Returns a string md5sum that is used in the exec method if the property of use useMd5 is set to true in the QML code.
@@ -344,12 +346,11 @@ void QmlSqlCreateDatabase::exec()
 QString QmlSqlCreateDatabase::generateMd5Sum(const QString &databaseName)
 {
 
-    QCryptographicHash md5(QCryptographicHash::Md5);
+    QCryptographicHash md5( QCryptographicHash::Md5 );
     // make the md5sum
-    md5.addData(databaseName.toUtf8());
+    md5.addData( databaseName.toUtf8() );
     // now that we have the name and the user did not enter in a path we can create a db
-    QString fName(QLatin1String(md5.result().toHex()));
-    return fName;
+    return QString( QLatin1String( md5.result().toHex() ) );
 }
 
 
@@ -363,12 +364,11 @@ QString QmlSqlCreateDatabase::getRandomString()
     QString possibleCharacters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     int randomStringLength = 12;
 
-    qsrand(QTime::currentTime().msec());
+    qsrand( QTime::currentTime().msec() );
 
     QString rString;
     for(int i=0; i<randomStringLength; ++i)
     {
-
         int index = qrand() % possibleCharacters.length();
         QChar nextChar = possibleCharacters.at(index);
         rString.append(nextChar);
@@ -382,9 +382,9 @@ QString QmlSqlCreateDatabase::getRandomString()
  */
 void QmlSqlCreateDatabase::handelError(const QString er)
 {
-    qDebug() << er ;
-    if ( m_errorString == er )
-        return;
-    m_errorString = er ;
-    emit errorStringChanged();
+    if ( m_errorString != er )
+    {
+        m_errorString = er ;
+        emit errorStringChanged();
+    }
 }

@@ -1,7 +1,5 @@
-QT += sql
-
+QT += sql qml quick core
 CONFIG += c++11
-
 SOURCES += \
     $$PWD/src/plugin.cpp \
     $$PWD/src/plugin.h \
@@ -12,4 +10,6 @@ SOURCES += \
     $$PWD/src/qmlsqlquerymodel.cpp \
     $$PWD/src/qmlsqlquerymodel.h \
     $$PWD/src/qqmlsqlquery.cpp \
-    $$PWD/src/qqmlsqlquery.h
+    $$PWD/src/qqmlsqlquery.h \
+    $$PWD/src/qmlsqlconnectionparameters.h \
+    $$PWD/qmlsqlconnectionparameters.cpp

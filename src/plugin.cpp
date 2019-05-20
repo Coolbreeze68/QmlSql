@@ -3,16 +3,23 @@
 #include "qqmlsqlquery.h"
 #include "qmlsqlquerymodel.h"
 #include "qmlsqlcreatedatabase.h"
+#include "qmlsqlconnectionparameters.h"
 #include <qqml.h>
 
-void QQmlSqlPlugin::registerTypes(const char *uri)
+static QObject *dbCallback( QQmlEngine *e, QJSEngine *se )
 {
-    // @uri QmlSql
-    qmlRegisterType<QmlSqlDatabase>(uri, 1, 0, "QmlSqlDatabase");
-    qmlRegisterType<QQmlSqlQuery>(uri,1,0,"QmlSqlQuery");
-    qmlRegisterType<QmlSqlQueryModel>(uri,1,0,"QmlSqlQueryModel");
-    qmlRegisterType<QmlSqlCreateDatabase>(uri,1,0,"QmlSqlCreateDatabase");
+    Q_UNUSED( e )
+    Q_UNUSED( se )
+    QmlSqlDatabase *db = new QmlSqlDatabase();
+    return db;
 }
 
-
-
+void QQmlSqlPlugin::registerTypes( const char *uri )
+{
+    // @uri QmlSql
+    qmlRegisterSingletonType<QmlSqlDatabase>( uri, 1, 0, "SqlDatabase", &dbCallback );
+    qmlRegisterType<QmlSqlConnectionParameters>( uri, 1, 0, "SqlConnectionParameters" );
+    qmlRegisterType<QQmlSqlQuery>( uri, 1, 0, "SqlQuery");
+    qmlRegisterType<QmlSqlQueryModel>( uri, 1, 0, "SqlQueryModel");
+    qmlRegisterType<QmlSqlCreateDatabase>( uri, 1, 0, "SqlCreateDatabase");
+}

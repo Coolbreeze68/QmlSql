@@ -8,7 +8,7 @@ Window {
     visible: true
     width: Screen.width / 2
     height: Screen.width / 2
-    title: qsTr("QmlSqlQuery Example")
+    title: qsTr( "SqlQuery Example" )
 
     Column{
         anchors.fill: parent
@@ -18,7 +18,7 @@ Window {
 
         Label{
             font.bold: true
-            text: qsTr("Enter in a query then press enter")
+            text: qsTr( "Enter in a query then press enter" )
             width: parent.width
             horizontalAlignment: Text.AlignHCenter
         }
@@ -58,7 +58,7 @@ Window {
         }
 
 
-        QmlSqlQuery{
+        SqlQuery{
             id: query
             // Set the connection name to the qml-sql-database
             connectionName: "mainConnection"
@@ -74,42 +74,41 @@ Window {
             }
         }
 
-
-        QmlSqlDatabase{
+        SqlConnectionParameters{
             id: mainConnection
             connectionName: "mainConnection"
-
             // Set the source of the database
             source: "127.0.0.1"
-
             // set the database Name
             databaseName: "mock_data"
-
             // set the User of the connection
             user: ""
-
             // set the password for that User
             password: ""
-
             // set the port for the connection
             port: 3306
-
             // set the driver to use
-            databaseDriver: QmlSqlDatabase.MySql
-
+            databaseDriver: SqlConnectionParameters.MySql
             // add the database to memory so we can call over and over again
-            Component.onCompleted: addDataBase()
-
-
-            // Run the query to fill the model
-            // ! make sure that you are connected first !
-            onConnectionOpened: query.exec()
-
-            onErrorStringChanged: {
-                queryOut.textFormat = Text.RichText
-                queryOut.text = "<p style='color:red'>" +errorString +"</p>"
-                queryOut.textFormat = Text.AutoText
+            Component.onCompleted:{
+                // add the connection parma's
+                SqlDatabase.parameters = mainConnection
+                // add the database
+                SqlDatabase.addDataBase()
             }
+        }
+    }
+
+    Connections{
+        target: SqlDatabase
+        // ! make sure that you are connected first !
+        onConnectionOpened:{
+            query.exec()
+        }
+        onErrorStringChanged: {
+            queryOut.textFormat = Text.RichText
+            queryOut.text = "<p style='color:red'>" +errorString +"</p>"
+            queryOut.textFormat = Text.AutoText
         }
     }
 }

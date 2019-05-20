@@ -14,18 +14,20 @@ uri = QmlSql
 
 # Input
 SOURCES += \
-    plugin.cpp \
-    qmlsqldatabase.cpp \
-    qqmlsqlquery.cpp \
-    qmlsqlquerymodel.cpp \
-    qmlsqlcreatedatabase.cpp
+    $$PWD/plugin.cpp \
+    $$PWD/qmlsqldatabase.cpp \
+    $$PWD/qqmlsqlquery.cpp \
+    $$PWD/qmlsqlquerymodel.cpp \
+    $$PWD/qmlsqlcreatedatabase.cpp \
+    qmlsqlconnectionparameters.cpp
 
 HEADERS += \
-    plugin.h \
-    qmlsqldatabase.h \
-    qqmlsqlquery.h \
-    qmlsqlquerymodel.h \
-    qmlsqlcreatedatabase.h
+    $$PWD/plugin.h \
+    $$PWD/qmlsqldatabase.h \
+    $$PWD/qqmlsqlquery.h \
+    $$PWD/qmlsqlquerymodel.h \
+    $$PWD/qmlsqlcreatedatabase.h \
+    qmlsqlconnectionparameters.h
 
 
 DISTFILES = qmldir
