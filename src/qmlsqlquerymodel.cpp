@@ -153,30 +153,24 @@ QHash<int, QByteArray>QmlSqlQueryModel::roleNames() const
 
 QString QmlSqlQueryModel::parseError(const QSqlError::ErrorType &mError)
 {
+    QString ret = "Unknown Error";
     if ( mError == QSqlError::NoError )
     {
-        return "No Error";
+        ret = "No Error";
     }
     else if ( mError == QSqlError::ConnectionError )
     {
-        return "Connection Error";
+        ret = "Connection Error";
     }
     else if ( mError == QSqlError::StatementError)
     {
-        return "Statement Error ";
+        ret = "Statement Error ";
     }
     else if ( mError == QSqlError::TransactionError)
     {
-        return "TransactionError";
+        ret = "TransactionError";
     }
-    else if ( mError == QSqlError::UnknownError)
-    {
-        return "Unknown Error";
-    }
-    else
-    {
-        return QString();
-    }
+    return ret;
 }
 
 void QmlSqlQueryModel::handelErrorString( const QString &errorString )

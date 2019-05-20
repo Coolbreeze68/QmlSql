@@ -116,7 +116,7 @@ bool QmlSqlCreateDatabase::useMd5() const
 */
 void QmlSqlCreateDatabase::setUseMd5(const bool &useMd5)
 {
-    if ( m_useMd5 == useMd5 )
+    if ( m_useMd5 != useMd5 )
     {
         m_useMd5 = useMd5 ;
         emit useMd5Changed();

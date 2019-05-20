@@ -9,7 +9,8 @@ SUBDIRS += \
 
 ##qpm
 OTHER_FILES += \
-        $$PWD/com_github_josephmillsatwork_qmlsql.pri \
-        $$PWD/qpm.json \
-        $$PWD/LICENSE
+    $$PWD/com_github_josephmillsatwork_qmlsql.pri \
+    $$PWD/qpm.json \
+    $$PWD/LICENSE \
+    $$PWD/README.md
 
